@@ -392,6 +392,28 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
+  <!-- 侧边栏按钮 -->
+  <div class="fixed top-4 right-4 z-50">
+    <button id="sidebarToggle" class="xianxia-btn text-sm px-4 py-2 flex items-center justify-center">
+      <i class="fa fa-bars mr-2"></i>菜单
+    </button>
+    
+    <!-- 侧边栏 -->
+    <div id="sidebar" class="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg overflow-hidden hidden z-50 max-w-xs w-80">
+      <div class="p-4 bg-xianxia-accent text-white">
+        <h3 class="font-bold">功能菜单</h3>
+      </div>
+      <div class="p-2 space-y-2">
+        <button id="groupBtn" class="w-full xianxia-btn text-sm px-4 py-2 text-left">
+          <i class="fa fa-users mr-2"></i>点此入群
+        </button>
+        <button id="cheatsheetBtn" class="w-full xianxia-btn text-sm px-4 py-2 text-left">
+          <i class="fa fa-list mr-2"></i>天赋天谴速查表
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- 页面容器 -->
   <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
     <!-- 标题区域 -->
@@ -468,6 +490,48 @@
     </footer>
   </div>
   
+  <!-- 入群图片遮罩层 -->
+  <div id="groupOverlay" class="overlay">
+    <div class="relative bg-white p-4 rounded-lg max-w-md mx-4">
+      <button id="closeGroupBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">
+        <i class="fa fa-times"></i>
+      </button>
+      <div class="text-center">
+        <h3 class="text-xl font-bold mb-4">逆命仙途TRPG交流1群</h3>
+        <p class="mb-4">群号：796368505</p>
+        <img src="qun.png" alt="交流群二维码" class="w-64 h-64 mx-auto mb-4">
+        <p class="text-gray-600">扫一扫二维码，加入群聊</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 速查表遮罩层 -->
+  <div id="cheatsheetOverlay" class="overlay overflow-y-auto">
+    <div class="relative bg-white p-6 rounded-lg max-w-4xl mx-4 max-h-[90vh]">
+      <button id="closeCheatsheetBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl z-10">
+        <i class="fa fa-times"></i>
+      </button>
+      <div class="text-center">
+        <h3 class="text-2xl font-bold mb-6">天赋天谴速查表</h3>
+        
+        <!-- 统一包裹天赋和天谴列表的容器 -->
+        <div class="space-y-8 max-h-[70vh] overflow-y-auto pr-2">
+          <!-- 天赋速查表 -->
+          <div>
+            <h4 class="text-xl font-bold mb-4 text-green-600">天赋列表</h4>
+            <div id="talentCheatsheet" class="space-y-6"></div>
+          </div>
+          
+          <!-- 天谴速查表 -->
+          <div>
+            <h4 class="text-xl font-bold mb-4 text-red-600">天谴列表</h4>
+            <div id="curseCheatsheet" class="space-y-6"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 遮罩层 -->
   <div id="overlay" class="overlay">
     <div class="text-center text-white">
@@ -566,7 +630,7 @@
       { id: 20, name: '缺一之境', level: 3, description: '对于功法神通的领悟总是到九成九，如观月见盈而欠一线，听潮闻声而漏一韵。只差一分无法完全掌握。你的天人合一值+1且无法降低。' },
       
       // 仙级天谴
-      { id: 21, name: '道痕', level: 4, description: '你的大道之基上有一道无法愈合的裂痕，你使用道源之法需骰d6，如果不为6则无法使用。' },
+      { id: 21, name: '道痕互斥', level: 4, description: '你的大道之基上有一道无法愈合的裂痕，你使用道源之法需骰d6，如果不为6则无法使用。' },
       { id: 22, name: '虚空道标', level: 4, description: '你的灵魂在无尽虚空中，如同一个明亮的道标，主持人拥有的“历练点”可用于在任意时间，向你的位置“投放”一个来自天外、异次元或深渊的、充满恶意的“访客”或“窥探”。它们可能直接攻击，可能扭曲周围环境，也可能只是静静地观察，带来最深沉的恐怖。' },
       { id: 23, name: '黑棺死运', level: 4, description: '你的气运宛如一口黑色的棺材笼罩在身上，每次游戏，你会有三次检定具有劣势！（由主持人决定何时启动）游戏开始时给主持人额外补充两个历练点。' },
       { id: 24, name: '至珍宝体', level: 4, description: '你的体质特殊是极佳的炼丹材料，有无数大能和妖兽觊觎着，你在城中或野外时可能会遇到各种势力的追捕。你到达一个新的城镇一定时间后，主持人会获得2个历练点。' },
@@ -621,16 +685,153 @@
     const overlayText = document.getElementById('overlayText');
     const currentMode = document.getElementById('currentMode');
     
+    // 新添加的DOM元素
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const groupBtn = document.getElementById('groupBtn');
+    const groupOverlay = document.getElementById('groupOverlay');
+    const closeGroupBtn = document.getElementById('closeGroupBtn');
+    const cheatsheetBtn = document.getElementById('cheatsheetBtn');
+    const cheatsheetOverlay = document.getElementById('cheatsheetOverlay');
+    const closeCheatsheetBtn = document.getElementById('closeCheatsheetBtn');
+    const talentCheatsheet = document.getElementById('talentCheatsheet');
+    const curseCheatsheet = document.getElementById('curseCheatsheet');
+    
     // 全局变量
     let isSpinning = false;
     let currentDrawMode = 'talent'; // 'talent' 或 'curse'
     let selectedTalent = null;
     let selectedCurse = null;
     
+    // 按等级归纳天赋和天谴
+    function groupByLevel(items) {
+      return items.reduce((groups, item) => {
+        const level = item.level;
+        if (!groups[level]) {
+          groups[level] = [];
+        }
+        groups[level].push(item);
+        return groups;
+      }, {});
+    }
+
+    // 生成速查表
+    function generateCheatsheet() {
+      // 生成天赋速查表
+      const groupedTalents = groupByLevel(talents);
+      talentCheatsheet.innerHTML = '';
+      
+      // 按等级顺序遍历
+      for (let level = 0; level <= 4; level++) {
+        if (groupedTalents[level]) {
+          const levelName = levels[level].name;
+          const levelColor = levels[level].color;
+          
+          const levelSection = document.createElement('div');
+          levelSection.className = 'xianxia-card p-4 rounded-lg';
+          levelSection.innerHTML = `
+            <h5 class="text-lg font-bold mb-3 flex items-center">
+              <span class="level-badge bg-${levelColor} mr-2">${levels[level].icon} ${levelName}级</span>
+              <span>天赋</span>
+            </h5>
+            <div class="space-y-3">
+              ${groupedTalents[level].map(item => `
+                <div class="p-3 bg-gray-50 rounded border-l-4 border-${levelColor}">
+                  <h6 class="font-bold">${item.name}</h6>
+                  <p class="text-sm mt-1">${item.description}</p>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          
+          talentCheatsheet.appendChild(levelSection);
+        }
+      }
+      
+      // 生成天谴速查表
+      const groupedCurses = groupByLevel(curses);
+      curseCheatsheet.innerHTML = '';
+      
+      // 按等级顺序遍历
+      for (let level = 0; level <= 4; level++) {
+        if (groupedCurses[level]) {
+          const levelName = levels[level].name;
+          const levelColor = levels[level].color;
+          
+          const levelSection = document.createElement('div');
+          levelSection.className = 'xianxia-card p-4 rounded-lg';
+          levelSection.innerHTML = `
+            <h5 class="text-lg font-bold mb-3 flex items-center">
+              <span class="level-badge bg-${levelColor} mr-2">${levels[level].icon} ${levelName}级</span>
+              <span>天谴</span>
+            </h5>
+            <div class="space-y-3">
+              ${groupedCurses[level].map(item => `
+                <div class="p-3 bg-gray-50 rounded border-l-4 border-${levelColor}">
+                  <h6 class="font-bold">${item.name}</h6>
+                  <p class="text-sm mt-1">${item.description}</p>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          
+          curseCheatsheet.appendChild(levelSection);
+        }
+      }
+    }
+
     // 初始化
     function init() {
       drawBtn.addEventListener('click', startDraw);
       resetBtn.addEventListener('click', resetDraw);
+      
+      // 侧边栏功能
+      sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('hidden');
+      });
+      
+      // 点击页面其他区域关闭侧边栏
+      document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+          sidebar.classList.add('hidden');
+        }
+      });
+      
+      // 入群图片功能
+      groupBtn.addEventListener('click', () => {
+        groupOverlay.classList.add('active');
+        sidebar.classList.add('hidden');
+      });
+      
+      closeGroupBtn.addEventListener('click', () => {
+        groupOverlay.classList.remove('active');
+      });
+      
+      // 点击遮罩层空白处关闭
+      groupOverlay.addEventListener('click', (e) => {
+        if (e.target === groupOverlay) {
+          groupOverlay.classList.remove('active');
+        }
+      });
+      
+      // 速查表功能
+      cheatsheetBtn.addEventListener('click', () => {
+        generateCheatsheet();
+        cheatsheetOverlay.classList.add('active');
+        sidebar.classList.add('hidden');
+      });
+      
+      closeCheatsheetBtn.addEventListener('click', () => {
+        cheatsheetOverlay.classList.remove('active');
+      });
+      
+      // 点击遮罩层空白处关闭
+      cheatsheetOverlay.addEventListener('click', (e) => {
+        if (e.target === cheatsheetOverlay) {
+          cheatsheetOverlay.classList.remove('active');
+        }
+      });
     }
     
     // 开始抽奖
