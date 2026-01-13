@@ -25,7 +25,7 @@
             'xianxia-accent': '#8B4513', // 古铜色
           },
           fontFamily: {
-            sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
+            sans: ['KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif'],
           },
           animation: {
             'spin-slow': 'spin 3s linear infinite',
@@ -98,46 +98,76 @@
         pointer-events: none;
         opacity: 0.8;
       }
+      .hamburger {
+        display: inline-block;
+        width: 16px;
+        height: 12px;
+        position: relative;
+      }
+      .hamburger span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: currentColor;
+        border-radius: 2px;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: .25s ease-in-out;
+      }
+      .hamburger span:nth-child(1) {
+        top: 0px;
+      }
+      .hamburger span:nth-child(2) {
+        top: 5px;
+      }
+      .hamburger span:nth-child(3) {
+        top: 10px;
+      }
     }
   </style>
   <style>
     /* 全局样式 */
+    * {
+      font-family: 'KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif' !important;
+    }
+    
     body {
       background-color: #F5EFE0;
       background-image: url('background.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      color: #5D4037;
-      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+      color: #f0f0f0;
       overflow-x: hidden;
     }
     
     /* 转盘样式 */
     .wheel-container {
       position: relative;
-      width: 300px;
-      height: 300px;
+      width: 150px;
+      height: 150px;
       margin: 0 auto;
     }
     
     /* 移动端转盘大小优化 */
     @media (max-width: 480px) {
       .wheel-container {
-        width: 240px;
-        height: 240px;
+        width: 120px;
+        height: 120px;
       }
       
       .wheel-center {
-        width: 32px;
-        height: 32px;
+        width: 16px;
+        height: 16px;
       }
       
       .wheel-pointer {
-        border-left: 12px solid transparent;
-        border-right: 12px solid transparent;
-        border-bottom: 24px solid #8B4513;
-        top: -16px;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 12px solid #8B4513;
+        top: -8px;
       }
     }
     
@@ -148,7 +178,7 @@
       position: relative;
       transition: transform 5s cubic-bezier(0.1, 0.05, 0.15, 1);
       transform: rotate(0deg);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
       background-image: url('wheel.png');
       background-size: cover;
       background-position: center;
@@ -158,24 +188,24 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 40px;
-      height: 40px;
+      width: 20px;
+      height: 20px;
       background-color: #8B4513;
       border-radius: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     }
     
     .wheel-pointer {
       position: absolute;
-      top: -20px;
+      top: -10px;
       left: 50%;
       width: 0;
       height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 30px solid #8B4513;
+      border-left: 7.5px solid transparent;
+      border-right: 7.5px solid transparent;
+      border-bottom: 15px solid #8B4513;
       transform: translateX(-50%);
       z-index: 10;
     }
@@ -395,7 +425,11 @@
   <!-- 侧边栏按钮 -->
   <div class="fixed top-4 right-2 z-50">
     <button id="sidebarToggle" class="xianxia-btn text-xs px-3 py-1 flex items-center justify-center">
-      <i class="fa fa-bars mr-1"></i>菜单
+      <span class="hamburger mr-1">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>菜单
     </button>
     
     <!-- 侧边栏 -->
@@ -415,18 +449,18 @@
   </div>
 
   <!-- 页面容器 -->
-  <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
+    <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
     <!-- 标题区域 -->
     <header class="text-center mb-8">
-      <h1 class="text-4xl md:text-5xl font-bold text-xianxia-text mb-2 text-shadow-lg">天赋天谴抽取</h1>
-      <p class="text-xl text-xianxia-accent">逆天改命，仙道茫茫</p>
+      <h1 class="text-4xl md:text-5xl font-bold text-[#f0fff0] mb-2 text-shadow-lg">天赋天谴抽取</h1>
+      <p class="text-xl text-[#f0fff0]">逆天改命，仙道茫茫</p>
     </header>
     
     <!-- 主要内容区域 -->
     <main class="flex-grow flex flex-col items-center justify-center">
       <!-- 转盘区域 -->
       <div class="mb-8 text-center">
-        <div id="modeIndicator" class="text-2xl font-bold mb-4 text-xianxia-accent">
+        <div id="modeIndicator" class="text-2xl font-bold mb-4 text-[#f0fff0]">
           <span id="currentMode">天赋抽取</span>
         </div>
         
@@ -485,7 +519,7 @@
     </main>
     
     <!-- 页脚 -->
-    <footer class="mt-8 text-center text-xianxia-accent">
+    <footer class="mt-8 text-center text-[#f0fff0]">
       <p>一骰问天机，一骰逆天命</p>
     </footer>
   </div>
