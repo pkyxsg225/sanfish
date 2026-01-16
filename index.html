@@ -76,6 +76,14 @@
         max-height: none;
         min-height: 120px;
       }
+      
+      /* 抽取结果展示页面和速查表文字颜色保持黑色 */
+      .xianxia-card h3,
+      .xianxia-card h5,
+      .xianxia-card p,
+      .xianxia-card span {
+        color: black !important;
+      }
       .level-badge {
         display: inline-block;
         padding: 2px 8px;
@@ -114,10 +122,10 @@
       overflow-x: hidden;
     }
     
-    /* 特定元素使用楷体和黑色 */
+    /* 特定元素使用楷体和#F0FFF0颜色 */
     h1, p, span, button {
       font-family: 'KaiTi', '楷体', 'DFKai-SB', 'STKaiti', 'SimKai', 'serif' !important;
-      color: black !important;
+      color: #F0FFF0 !important;
     }
     
     /* 转盘样式 */
@@ -425,15 +433,15 @@
     <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
     <!-- 标题区域 -->
     <header class="text-center mt-[-2rem] mb-4">
-      <h1 class="text-4xl md:text-5xl font-bold text-[#f0fff0] mb-2 text-shadow-lg">天赋天谴抽取</h1>
-      <p class="text-xl text-[#f0fff0]">逆天改命，仙道茫茫</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-2 text-shadow-lg">天赋天谴抽取</h1>
+      <p class="text-xl">逆天改命，仙道茫茫</p>
     </header>
     
     <!-- 主要内容区域 -->
     <main class="flex-grow flex flex-col items-center justify-center">
       <!-- 转盘区域 -->
       <div class="mb-8 text-center">
-        <div id="modeIndicator" class="text-2xl font-bold mb-4 text-[#f0fff0]">
+        <div id="modeIndicator" class="text-2xl font-bold mb-4">
           <span id="currentMode">天赋抽取</span>
         </div>
         
@@ -492,7 +500,7 @@
     </main>
     
     <!-- 页脚 -->
-    <footer class="mt-8 text-center text-[#f0fff0]">
+    <footer class="mt-8 text-center">
       <p>一骰问天机，一骰逆天命</p>
     </footer>
   </div>
@@ -690,7 +698,10 @@
       { talentId: 26, curseId: 13, effect: "缩地千里，气脉滞涩：你身怀缩地成寸之能，消耗灵气便可超远距离移动，往来穿梭如履平地；可你气脉缠结，灵气运转滞涩。缩地成寸给了你 “逃出生天” 的希望，气脉缠结却给了你 “灵气不足” 的绝望，每次动用天赋都像在 “赌灵气”，稍有不慎便会陷入绝境。" },
       { talentId: 33, curseId: 11, effect: "春秋改命，惊魄难安：你手握 “春秋必成” 的逆天权限，可消耗福缘点改变已发生的事，可你天生惊魄未定，冲突中紧张不安。春秋必成让你 “能改天命”，惊魄未定却让你 “难稳心神”，每次改命成功后，你都要面对灵气不足的窘境，仿佛天道在告诫你：“改写命运，需付心神之代价”。" },
       { talentId: 5, curseId: 17, effect: "灵枢御术，业魂扰判：你天生灵枢通明，运用灵气驱动奇术顺畅无比；可一缕业魂如影随形，干扰判定。灵枢通明让你 “术法精进”，业魂随影却让你 “判定难稳”，你能把术法练到炉火纯青，却防不住业魂的突然发难，每次施展奇术时都要做好 “成功与失败” 的双重准备。" },
-      
+      { talentId: 33, curseId: 23, effect: "黑棺死运，春秋必成：什么？居然是大爱仙尊亲临！！！！！！！！！" },
+      { talentId: 34, curseId: 25, effect: "经典系统流主角，你的灵气比白送的还要多，那就炸你一下吧！" },
+      { talentId: 34, curseId: 25, effect: "经典系统流主角，你的灵气比白送的还要多，那就炸你一下吧！" },
+
       // 凡级组合
       "虽然天赋和天谴都很普通，但这种平衡的状态或许正是修炼的真谛。",
       "平凡中蕴含着伟大，普通的天赋和天谴可能正是你成就大道的基石。",
